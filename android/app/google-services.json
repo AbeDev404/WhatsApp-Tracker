@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1059092555524",
+    "firebase_url": "https://whatstracker-2c129-default-rtdb.firebaseio.com",
+    "project_id": "whatstracker-2c129",
+    "storage_bucket": "whatstracker-2c129.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059092555524:android:e2b930dc7a9dcd5ad65251",
+        "android_client_info": {
+          "package_name": "com.whatstrack.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059092555524-trjubi1n72lkp5vehskq54ng8dpefrfe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.whatstrack.app",
+            "certificate_hash": "2f6fbf3d2d78b7ef410c642bc9ced85bd040259b"
+          }
+        },
+        {
+          "client_id": "1059092555524-jsl1752k7g8n8jj2fsojassppak445a4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB_6H8-dr8aGSu4gPKoTvISb8YG0_ZGKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059092555524-jsl1752k7g8n8jj2fsojassppak445a4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1059092555524-4vvh7kmei2hs7qkplhmhqpdg4nm8hjaq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vivekwarde.WhatsTracker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
