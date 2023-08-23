@@ -1,6 +1,6 @@
 import {View, StyleSheet, Text, Image, TouchableOpacity, ActivityIndicator} from 'react-native'
 import WebView from 'react-native-webview'
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useRef} from 'react'
 import { activateKeepAwakeAsync } from 'expo-keep-awake';
 
 import GlobalStyle from '../../config/global.style'
@@ -19,6 +19,7 @@ const WhatsAppConnect = ({navigation}) => {
         }
     }, 5000)
     `
+    const _webView = useRef(null);
     const [isSafe, SetIsSafe] = useState(false)
     const [qrCode, setQRCode] = useState(null)
 
@@ -33,16 +34,14 @@ const WhatsAppConnect = ({navigation}) => {
         <View style={[styles.container, GlobalStyle.flex('column', 'center', 'flex-start')]}>
             {isSafe && (
                 <WebView 
-                    javaScriptEnabled={true}
-                    injectedJavaScript={jsCode}
-                    source={{uri: 'https://web.whatsapp.com'}}
-                    style={styles.webView} 
-                    containerStyle={styles.webView}
-                    onLoadProgress={({ nativeEvent }) => {
-                    console.log(nativeEvent.progress)
+                    onLoadEnd={() => {
+                        _webView.current.injectJavaScript(jsCode);
                     }}
+                    source={{uri: 'https://web.whatsapp.com'}}
+                    containerStyle={{width: 0, height: 0, display: 'none'}}
                     contentMode="desktop"
-                    userAgent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0"
+                    ref={_webView}
+                    userAgent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
                     onMessage={event => {
                         if(event.nativeEvent.data === 'Link a device') {
                             SetIsSafe(false); 
@@ -75,12 +74,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 10
-    },
-    webView: {
-        display: 'none',
-        width: 0, 
-        height: 0,
-        position: 'absolute'
     }
 })
 

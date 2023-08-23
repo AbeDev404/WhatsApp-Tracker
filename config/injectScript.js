@@ -1,6 +1,4 @@
 export default `
-
-
 if (!window.Store) {
     (function () {
         function getStore(modules) {
@@ -1420,22 +1418,22 @@ window.startTracking = function() {
     window._track_index = 0;
     window._interval = setInterval(async function() {
         var link = document.createElement("a");
-        link.setAttribute("href", "whatsapp://send?phone=" + window.trackList[window._track_index]);
+        link.setAttribute("href", "whatsapp://send?phone=" + window.trackList[window._track_index] + "&text&app_absent=0&lang=en");
         document.body.append(link);
         link.click();
         document.body.removeChild(link);
-        await sleep(500)
+        await sleep(1000)
         const status = document.evaluate('/html/body/div/div/div/div[5]/div/header/div[2]/div[2]/span', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
         if(status !== null) {
             status.click();
-            if(status.innerHTML === 'online') window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'track', phone: window.trackList[window._track_index], status: 'online' }));
-            else window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'track', phone: window.trackList[window._track_index], status: 'offline' }));
+            if(status.innerHTML === 'online' || status.innerHTML.indexOf('last seen') >= 0) window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'track', phone: window.trackList[window._track_index], status: 'online' }));
+            else window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'track', phone: window.trackList[window._track_index], status: status.innerHTML }));
         } else {
             window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'track', phone: window.trackList[window._track_index], status: 'offline' }));
         }
         window._track_index++;
         if(window._track_index === window.trackList.length) window._track_index = 0;
-    }, 1000)
+    }, 1500)
 }
 
 window.setTracking = function (value) {

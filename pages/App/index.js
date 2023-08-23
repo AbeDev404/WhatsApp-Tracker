@@ -91,23 +91,12 @@ const Dashboard = ({navigation}) => {
 
                 let contact = contacts.filter((item, index, array) => item.id.indexOf(`${data.phone}@`) >= 0)[0];
                 if(data.status === 'online') {
-                    Toast.show({ type: 'success', position: 'top', text1: `${contact.name === undefined ? 'No Name' : contact.name}`, text2: 'IS ONLINE NOW 👋', visibilityTime: 3000, autoHide: true, topOffset: 30, bottomOffset: 40 });
                     trackOnlineHistory(contact, data.phone, Date.now());
                 } else {
                     trackOfflineHistory(contact, data.phone, Date.now());
                 }
             }
         }
-
-        // if(message.nativeEvent.data === 'Link a device') {
-        //     SetIsSafe(false)
-        //     navigation.replace('WAConnect')
-        //     setLoading(false)
-        // } else {
-        //     SecureStore.setItemAsync('contacts', message.nativeEvent.data)
-        //     setContacts(JSON.parse(message.nativeEvent.data))
-        //     setLoading(false)
-        // }
     }
 
     const onUpdateContact = () => {
@@ -128,27 +117,24 @@ const Dashboard = ({navigation}) => {
     }
 
     const onLogout = () => {
-        _webView.current.injectJavaScript(`
-            document.evaluate('/html/body/div/div/div/div[4]/header/div[2]/div/span/div[4]/div', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
+        // _webView.current.injectJavaScript(`
+        //     document.evaluate('/html/body/div/div/div/div[4]/header/div[2]/div/span/div[4]/div', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
 
-            setTimeout(function() {
-                document.evaluate('/html/body/div/div/div/div[4]/header/div[2]/div/span/div[4]/span/div/ul/li[6]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
-                setTimeout(function() {
-                    document.evaluate('/html/body/div/div/span[2]/div/div/div/div/div/div/div[3]/div/button[2]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
-                }, 500)
-            }, 500);
-        `)
-        setLoading(true);
-        setTimeout(() => {
-            SetIsReady(false)
-            setTracking(false)
-            SetIsSafe(false)
-            _closeMenu().
-            setLoading(false);
-            SecureStore.setItemAsync('contacts', '')
-            SecureStore.setItemAsync('is_login', '')
-            navigation.replace('SignIn')
-        }, 5000)
+        //     setTimeout(function() {
+        //         document.evaluate('/html/body/div/div/div/div[4]/header/div[2]/div/span/div[4]/span/div/ul/li[6]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
+        //         setTimeout(function() {
+        //             document.evaluate('/html/body/div/div/span[2]/div/div/div/div/div/div/div[3]/div/button[2]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();
+        //         }, 500)
+        //     }, 500);
+        // `)
+
+        SetIsReady(false)
+        setTracking(false)
+        SetIsSafe(false)
+        _closeMenu();
+        SecureStore.setItemAsync('contacts', '')
+        SecureStore.setItemAsync('is_login', '')
+        navigation.replace('SignIn')
     }
 
     const onToogleTrack = () => {
@@ -231,24 +217,21 @@ const Dashboard = ({navigation}) => {
 
             {isSafe && (
                 <WebView
-                    javaScriptEnabled={true}
-                    injectedJavaScript={injectScript}
-                    source={{uri: 'https://web.whatsapp.com'}}
-                    style={{width: 300, height: 600, position: 'absolute', top: '150%'}} 
-                    // style={{width: 300, height: 300}}
+                    // injectedJavaScript={injectScript}
+                    source={{uri: 'https://web.whatsapp.com/'}}
+                    // style={{width: 300, height: 600, position: 'absolute', top: '150%'}} 
+                    containerStyle={{width: 0, height: 0}}
                     onMessage={onMessage}
                     ref={_webView}
                     onLoadEnd={() => {
+                        _webView.current.injectJavaScript(injectScript);
                         _webView.current.injectJavaScript(`
                         window.ReactNativeWebView.postMessage(JSON.stringify({type: 'auth', isLoggedIn: WAPI.isLoggedIn(), isConnected: WAPI.isConnected()}))
                         true;
                         `)
                     }}
-                    allowFileAccess={true}
-                    originWhitelist={["*"]}
-                    webviewDebuggingEnabled
                     contentMode="desktop"
-                    userAgent="Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0"
+                    userAgent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"
                 />
             )}
             {loading && (
